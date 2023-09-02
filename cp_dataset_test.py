@@ -30,17 +30,17 @@ class CPDatasetTest(data.Dataset):
 
         # load data list
         im_names = []
-        c_names = []
+        c_names_list = []
         with open(osp.join(opt.dataroot, opt.data_list), 'r') as f:
             for line in f.readlines():
                 im_name, c_name = line.strip().split()
                 im_names.append(im_name)
-                c_names.append(c_name)
+                c_names_list.append(c_name)
 
         self.im_names = im_names
         self.c_names = dict()
         self.c_names['paired'] = im_names
-        self.c_names['unpaired'] = c_name
+        self.c_names['unpaired'] = c_names_list
 
     def name(self):
         return "CPDataset"
@@ -117,6 +117,7 @@ class CPDatasetTest(data.Dataset):
         c = {}
         cm = {}
         for key in self.c_names:
+            key = 'unpaired'    # if the key is unpaired then it's looking for paired cloth which crashes
             c_name[key] = self.c_names[key][index]
             c[key] = Image.open(osp.join(self.data_path, 'cloth', c_name[key])).convert('RGB')
             c[key] = transforms.Resize(self.fine_width, interpolation=2)(c[key])
