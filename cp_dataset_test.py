@@ -117,11 +117,11 @@ class CPDatasetTest(data.Dataset):
         c = {}
         cm = {}
         for key in self.c_names:
-            key = 'unpaired'    # if the key is unpaired then it's looking for paired cloth which crashes
+            key_path = 'unpaired'    # if the key is unpaired then it's looking for paired cloth which crashes
             c_name[key] = self.c_names[key][index]
-            c[key] = Image.open(osp.join(self.data_path, 'cloth', c_name[key])).convert('RGB')
+            c[key] = Image.open(osp.join(self.data_path, 'cloth', c_name[key_path])).convert('RGB')
             c[key] = transforms.Resize(self.fine_width, interpolation=2)(c[key])
-            cm[key] = Image.open(osp.join(self.data_path, 'cloth-mask', c_name[key]))
+            cm[key] = Image.open(osp.join(self.data_path, 'cloth-mask', c_name[key_path]))
             cm[key] = transforms.Resize(self.fine_width, interpolation=0)(cm[key])
 
             c[key] = self.transform(c[key])  # [-1,1]
