@@ -39,7 +39,8 @@ class CPDatasetTest(data.Dataset):
 
         self.im_names = im_names
         self.c_names = dict()
-        self.c_names['paired'] = im_names
+        #self.c_names['paired'] = im_names  # this line was causing an error since paired im_names don't exist for cloth
+        self.c_names['paired'] = c_names_list
         self.c_names['unpaired'] = c_names_list
 
     def name(self):
@@ -117,7 +118,6 @@ class CPDatasetTest(data.Dataset):
         c = {}
         cm = {}
         for key in self.c_names:
-            key_path = 'unpaired'    # if the key is unpaired then it's looking for paired cloth which crashes
             c_name[key] = self.c_names[key][index]
             c[key] = Image.open(osp.join(self.data_path, 'cloth', c_name[key_path])).convert('RGB')
             c[key] = transforms.Resize(self.fine_width, interpolation=2)(c[key])
